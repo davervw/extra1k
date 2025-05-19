@@ -1,0 +1,80 @@
+; EXTRA1K.LST - Dump and Disassembly
+;
+; EXTRA1K.PRG - make 1K extra RAM available for BASIC
+;
+; Moves BASIC RAM low pointer to $400 (1024)
+; Moves Screen to $CC00
+; Copies CHAR ROM $D000 to $F000 RAM (otherwise CHAR ROM is unavailable to VIC-II in bank 3)
+; Handler code $CBA3 to $CBFF
+;
+; INSTRUCTIONS:
+;    LOAD "EXTRA1K",8,1
+;    SYS 52131
+;
+; WARNING: 
+;    $CBA3 to $CFFF is reserved, and screen memory has moved to 52224
+;    May not be compatible as is with other BASIC extensions 
+;      because of new NMI handler used to keep changes from being reverted
+;
+; AUTHOR: Dave Van Wagner
+; MIT LICENSE
+;
+; CREDITS: 
+;   8-Bit Show And Tell (SYS 58266 = JMP E39A) https://youtu.be/WZQ1FMWnG9w
+;   CBM BASIC ROM NMI Handler (JMP E38B, JMP A474)
+;   Jim Butterfield's SCREENMAP64 for calculating POKEs to move screen/chars
+;   Ultimate Commodore 64 Reference: ROM Disassembly https://www.pagetable.com/c64ref/c64disasm
+;   Programmed in VICE 3.8 monitor
+
+; cba3 = 52131
+
+>C:cba3  78 a0 00 84  fb a9 d0 85  fc a5 01 29  f8 09 01 85
+>C:cbb3  01 84 fd a9  f0 85 fe b1  fb 91 fd c8  d0 f9 e6 fc
+>C:cbc3  e6 fe d0 f3  a5 01 09 07  85 01 58 8c  00 04 a9 04
+>C:cbd3  85 2c a9 f5  a2 cb 8d 00  03 8e 01 03  20 e5 cb 4c
+>C:cbe3  9a e3 a9 04  8d 00 dd a9  3c 8d 18 d0  a9 cc 8d 88
+>C:cbf3  02 60 10 06  20 e5 db 4c  8b e3 4c 74  a4       
+
+.C:cba3  78          SEI
+.C:cba4  A0 00       LDY #$00
+.C:cba6  84 FB       STY $FB
+.C:cba8  A9 D0       LDA #$D0
+.C:cbaa  85 FC       STA $FC
+.C:cbac  A5 01       LDA $01
+.C:cbae  29 F8       AND #$F8
+.C:cbb0  09 01       ORA #$01
+.C:cbb2  85 01       STA $01
+.C:cbb4  84 FD       STY $FD
+.C:cbb6  A9 F0       LDA #$F0
+.C:cbb8  85 FE       STA $FE
+.C:cbba  B1 FB       LDA ($FB),Y
+.C:cbbc  91 FD       STA ($FD),Y
+.C:cbbe  C8          INY
+.C:cbbf  D0 F9       BNE $CBBA
+.C:cbc1  E6 FC       INC $FC
+.C:cbc3  E6 FE       INC $FE
+.C:cbc5  D0 F3       BNE $CBBA
+.C:cbc7  A5 01       LDA $01
+.C:cbc9  09 07       ORA #$07
+.C:cbcb  85 01       STA $01
+.C:cbcd  58          CLI
+.C:cbce  8C 00 04    STY $0400
+.C:cbd1  A9 04       LDA #$04
+.C:cbd3  85 2C       STA $2C
+.C:cbd5  A9 F5       LDA #$F5
+.C:cbd7  A2 CB       LDX #$CB
+.C:cbd9  8D 00 03    STA $0300
+.C:cbdc  8E 01 03    STX $0301
+.C:cbdf  20 E5 CB    JSR $CBE5
+.C:cbe2  4C 9A E3    JMP $E39A
+.C:cbe5  A9 04       LDA #$04
+.C:cbe7  8D 00 DD    STA $DD00
+.C:cbea  A9 3C       LDA #$3C
+.C:cbec  8D 18 D0    STA $D018
+.C:cbef  A9 CC       LDA #$CC
+.C:cbf1  8D 88 02    STA $0288
+.C:cbf4  60          RTS
+.C:cbf5  10 06       BPL $CBFD
+.C:cbf7  20 E5 DB    JSR $DBE5
+.C:cbfa  4C 8B E3    JMP $E38B
+.C:cbfd  4C 74 A4    JMP $A474
