@@ -8,3 +8,6 @@ Instructions:
     SYS 53121
 
 ![blah](extra1k.png)
+
+See use of Jim Butterfield's SCREENMAP64 and discussions of optimal memory layouts:
+https://techwithdave.davevw.com/2024/05/c64-ram-locations-for-programmable.html
