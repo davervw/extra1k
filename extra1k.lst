@@ -23,6 +23,7 @@
 ;
 ; CREDITS: 
 ;   8-Bit Show And Tell (SYS 58266 = JMP E39A) https://youtu.be/WZQ1FMWnG9w
+;   C64 RAM banks discussion https://techwithdave.davevw.com/2024/06/banktest-for-c64.html
 ;   CBM BASIC ROM NMI Handler (JMP E38B, JMP A474)
 ;   Jim Butterfield's SCREENMAP64 for calculating POKEs to move screen/chars
 ;   Ultimate Commodore 64 Reference: ROM Disassembly https://www.pagetable.com/c64ref/c64disasm
