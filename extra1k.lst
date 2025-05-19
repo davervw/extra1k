@@ -2,6 +2,11 @@
 ;
 ; EXTRA1K.PRG - make 1K extra RAM available for BASIC
 ;
+; Copyright (c) 2025 by David R. Van Wagner
+; MIT LICENSE
+;
+; https://github.com/davervw/extra1k
+;
 ; Moves BASIC RAM low pointer to $400 (1024)
 ; Moves Screen to $CC00
 ; Copies CHAR ROM $D000 to $F000 RAM (otherwise CHAR ROM is unavailable to VIC-II in bank 3)
@@ -15,9 +20,6 @@
 ;    $CBA3 to $CFFF is reserved, and screen memory has moved to 52224
 ;    May not be compatible as is with other BASIC extensions 
 ;      because of new NMI handler used to keep changes from being reverted
-;
-; AUTHOR: Dave Van Wagner
-; MIT LICENSE
 ;
 ; CREDITS: 
 ;   8-Bit Show And Tell (SYS 58266 = JMP E39A) https://youtu.be/WZQ1FMWnG9w
