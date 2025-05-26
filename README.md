@@ -11,5 +11,5 @@ Also see EXTRA1228.PRG for borrowing another 204 bytes from the cassette buffer 
 
 ![screenshot](extra1k.png)
 
-See use of Jim Butterfield's SCREENMAP64 and discussions of optimal memory layouts:
+See use of Jim Butterfield's SCREENMAP 64 and discussions of optimal memory layouts:
 https://techwithdave.davevw.com/2024/05/c64-ram-locations-for-programmable.html
