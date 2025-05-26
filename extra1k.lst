@@ -21,13 +21,13 @@
 ; WARNING: 
 ;    $CBA3 to $CFFF is reserved, and screen memory has moved to 52224
 ;    May not be compatible as is with other BASIC extensions 
-;      because of new NMI handler used to keep changes from being reverted
+;      because of new WARMSTART handler used to keep changes from being reverted
 ;
 ; CREDITS: 
 ;   8-Bit Show And Tell (SYS 58266 = JMP E39A) https://youtu.be/WZQ1FMWnG9w
 ;   C64 RAM banks discussion https://techwithdave.davevw.com/2024/06/banktest-for-c64.html
-;   CBM BASIC ROM NMI Handler (JMP E38B, JMP A474)
-;   Jim Butterfield's SCREENMAP64 for calculating POKEs to move screen/chars
+;   CBM BASIC ROM WARMSTART Handler (JMP (0300), JMP E38B)
+;   Jim Butterfield's SCREENMAP 64 for calculating POKEs to move screen/chars
 ;   Ultimate Commodore 64 Reference: ROM Disassembly https://www.pagetable.com/c64ref/c64disasm
 ;   Compute!'s Mapping the Commodore 64 https://archive.org/details/Compute_s_Mapping_the_Commodore_64
 ;   Programmed in VICE 3.8 monitor
@@ -37,9 +37,9 @@
 >C:cba3  78 a0 00 84  fb a9 d0 85  fc a5 01 aa  29 f9 85 01
 >C:cbb3  84 fd a9 f0  85 fe b1 fb  91 fd c8 d0  f9 e6 fc e6
 >C:cbc3  fe d0 f3 86  01 58 8c 00  04 a9 01 a2  04 85 2b 86
->C:cbd3  2c a9 f4 a2  cb 8d 00 03  8e 01 03 20  e4 cb 4c 9a
->C:cbe3  e3 a9 04 8d  00 dd a9 3c  8d 18 d0 a9  cc 8d 88 02
->C:cbf3  60 8a 10 06  20 e4 cb 4c  91 e3 4c 8e  e3         
+>C:cbd3  2c a9 f9 a2  cb 8d 00 03  8e 01 03 20  e4 cb 4c 9a
+>C:cbe3  e3 a9 04 8d  00 dd a9 cc  8d 88 02 ad  18 d0 29 0e
+>C:cbf3  09 38 8d 18  d0 60 20 e4  cb 4c 8b e3  ea         
 
 .C:cba3  78          SEI
 .C:cba4  A0 00       LDY #$00
@@ -67,7 +67,7 @@
 .C:cbce  A2 04       LDX #$04
 .C:cbd0  85 2B       STA $2B
 .C:cbd2  86 2C       STX $2C
-.C:cbd4  A9 F4       LDA #$F4
+.C:cbd4  A9 F9       LDA #$F9
 .C:cbd6  A2 CB       LDX #$CB
 .C:cbd8  8D 00 03    STA $0300
 .C:cbdb  8E 01 03    STX $0301
@@ -75,13 +75,13 @@
 .C:cbe1  4C 9A E3    JMP $E39A
 .C:cbe4  A9 04       LDA #$04
 .C:cbe6  8D 00 DD    STA $DD00
-.C:cbe9  A9 3C       LDA #$3C
-.C:cbeb  8D 18 D0    STA $D018
-.C:cbee  A9 CC       LDA #$CC
-.C:cbf0  8D 88 02    STA $0288
-.C:cbf3  60          RTS
-.C:cbf4  8A          TXA
-.C:cbf5  10 06       BPL $CBFD
-.C:cbf7  20 E4 CB    JSR $CBE4
-.C:cbfa  4C 91 E3    JMP $E391
-.C:cbfd  4C 8E E3    JMP $E38E
+.C:cbe9  A9 CC       LDA #$CC
+.C:cbeb  8D 88 02    STA $0288
+.C:cbee  AD 18 D0    LDA $D018
+.C:cbf1  29 0E       AND #$0E
+.C:cbf3  09 38       ORA #$38
+.C:cbf5  8D 18 D0    STA $D018
+.C:cbf8  60          RTS
+.C:cbf9  20 E4 CB    JSR $CBE4
+.C:cbfc  4C 8B E3    JMP $E38B
+.C:cbff  EA          NOP
